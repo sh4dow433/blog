@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block title %}
+LOGIN
+{% endblock %}
+
+{% block content %}
+<div style="padding-top:80px!important;">
+    <div class="login-content bg-light">
+        <!-- Username -->
+        <form action="/login" method="POST" class="needs-validation text-secondary" novalidate>
+            <h2 class="text-primary">Login Page</h2>
+            <div class="form-group">
+                <label for="uname">Username:</label>
+                <input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+            </div>
+            <!-- Password -->
+            <div class="form-group">
+                <label for="pwd">Password:</label>
+                <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd" required>
+                <div class="valid-feedback">Valid.</div>
+                <div class="invalid-feedback">Please fill out this field.</div>
+            </div>
+            <!-- Login btn -->
+            <button type="submit" class="btn btn-primary">Login</button>
+            <!-- Sign Up btn -->
+            <button type="button" onclick="location.href = '/sign-up';" class="btn btn-secondary">Sign Up</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Disable form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

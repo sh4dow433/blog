@@ -1,0 +1,213 @@
+{% extends "layout.html" %}
+{% block title %}
+TITLU BLOG
+{% endblock %}
+
+{% block content %}
+<div class="container main">
+    <!-- Information about blog-->
+    <div class="row bg-light">
+        <div class="col" style="height:200px;">
+            <div class="blog-image-container bg-primary">
+                <!-- Profile pic -->
+                <img src="{{ url_for('static', filename='/images/' + blog.profile_pic_location) }}" alt="Profile Pic"
+                    class="img-fluid img-thumbnail blog-image">
+            </div>
+        </div>
+        <div class="col-8">
+            <!-- Blog Description -->
+            <div class="blog-description text-right text-secondary">
+                <h2 class="text-primary">{{ blog.title}}</h2>
+                <h6><a href="">by {{blog_owner_name}}</a></h6>
+                <p>{{ blog.description}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Posts column -->
+        <div class="col-9">
+            <div class="blog-margin"></div>
+            <!-- New Post -->
+            <!-- if user is logged in and is the owner -->
+            {% if logged_in and owner %}
+            <div class="blog-new-post bg-light text-secondary">
+                <h4 class="text-primary">Create New Post</h4>
+                <form action={{'/blog/' + blog.id|string}} method="POST" class="needs-validation text-secondary"
+                    novalidate>
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label for="post-title">Title:</label>
+                        <input type="text" class="form-control" id="post-title" placeholder='Post Title'
+                            name="post-title" required>
+                        <div class="valid-feedback">Valid.</div>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="post-content">Description</label>
+                        <textarea class="form-control" id="post-content" name="post-content" rows="3"
+                            required></textarea>
+                        <div class="valid-feedback">Valid.</div>
+                        <div class="invalid-feedback">Please fill out this field.</div>
+                    </div>
+                    <!-- Save btn -->
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+                <hr>
+                <hr>
+            </div>
+            {% endif %}
+            <div class="blog-posts bg-light text-secondary">
+                <!-- POSTS -->
+                {% for post in posts %}
+                <div class="blog-post">
+                    <!-- Post title -->
+                    <h3 class="text-primary">{{ post.title}}</h3>
+                    <!-- Post date -->
+                    <h6 class="text-info blog-padding-10">{{ post.date }}</h6>
+                    <!-- Post content -->
+                    <p class="blog-padding-10">{{ post.content }}</p>
+                    <!-- Post buttons -->
+                    <div class="row">
+                        <div class="col">
+                            {% if logged_in %}
+                            <!-- Post Like button -->
+                            <!-- Test if already liked -->
+                            {% if false %}
+                            <a class="blog-padding-10" href="/"><b>Liked</b></a>
+                            {% else %}
+                            <a class="blog-padding-10" href="/">Like</a>
+                            {% endif %}
+                            <!-- Post Share button -->
+                            <a class="blog-padding-10" href="http://facebook.com">Share</a>
+                            {% endif %}
+                        </div>
+                        <!-- Post's likes number -->
+                        <div class="col text-primary text-right">
+                            Likes: {{post.num_likes}}
+                        </div>
+                    </div>
+                    <!-- Comments Box-->
+                    <div class="blog-comments-box">
+                        <!-- Comment FORM -->
+                        <!-- Test if logged in -->
+                        {% if logged_in %}
+                        <form action={{'/blog/' + blog.id|string}} method="POST">
+                            <label>Comment:</label>
+                            <textarea class="form-control" rows="3" name={{ 'comment' + post.id|string}}></textarea>
+                            <button type="submit"
+                                class="float-right blog-comment-submit-btn btn btn-sm btn-primary">Submit</button>
+                        </form>
+                        <br><br><br>
+                        {% endif %}
+                        <!-- COMMENTS -->
+
+                        {% for comment in comments[post.id] %}
+                        <div class="blog-comment-block border-top">
+                            <!-- User that commented -->
+                            <h6 class="text-primary">{{ comments_user[comment.id] }}</h6>
+                            <!-- Comment date -->
+                            <p class="text-info">{{ comment.date }}</p>
+                            <!-- Comment's content -->
+                            <p class="text-secondary">{{ comment.content }}</p>
+                            <div class="row">
+                                <div class="col">
+                                    {% if logged_in %}
+                                    <!-- Comment's Like button -->
+                                    <!-- Test if already liked -->
+                                    {% if false %}
+                                    <a href="/"><b>Liked</b></a>
+                                    {% else %}
+                                    <a href="/">Like</a>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="col text-primary text-right">
+                                    Likes: {{ comment.num_likes}}
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p class="text-secondary">No comments</p>
+                        {% endfor %}
+                    </div>
+                    <!-- HR Line between posts -->
+                    <hr>
+                </div>
+                {% else %}
+                <p class="text-secondary">No Posts yet</p>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Aside -->
+        <div class="col">
+            <!-- Statistics -->
+
+            <div class="row justify-content-center blog-statistics bg-light text-secondary">
+                <h2 class="text-secondary">Statistics</h2>
+                <ul class="text-primary list-group list-group-flush">
+                    <li class="list-group-item bg-light">Followers: {{ blog.num_followers}}</li>
+                    <li class="list-group-item bg-light">Likes: {{blog.num_likes}}</li>
+                    <!-- <li class="list-group-item bg-light">Posts: 20</li>
+                    <li class="list-group-item bg-light">Comments: 232</li> -->
+                </ul>
+            </div>
+            <!-- Test if logged in -->
+            {% if logged_in %}
+            <!-- Blog actions -->
+            <div class="row justify-content-center blog-actions bg-light text-secondary">
+                <h2 class="text-primary">Actions</h2>
+                <!-- Normal actions -->
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        <!-- Test if is already following -->
+                        <form action={{'/blog/' + blog.id|string}} method="POST">
+                            {% if followed %}
+                            <button type="submit" name="f-btn" value="unfollow"
+                                class="btn btn-sm btn-outline-danger active blog-btn">Followed</button>
+                            {% else %}
+                            <button type="submit" name="f-btn" value="follow"
+                                class="btn btn-sm btn-outline-secondary blog-btn">Follow</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Second group">
+                        <button type="button" class="btn btn-sm btn-primary blog-btn" onclick="location.href = 'http://facebook.com'">Share</button>
+                    </div>
+                </div>
+                <!-- Owner actions -->
+                <!-- Test if user is the owner -->
+                {% if owner %}
+                <button type="button" class="btn btn-secondary btn-sm btn-block blog-btn blog-edit-btn"
+                    style="margin-top:20px;" onclick="location.href = '/edit-blog';">Edit Blog</button>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Disable form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

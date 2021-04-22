@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %}
+Search results for {{ cautare }}
+{% endblock %}
+
+{% block content %}
+<div class="container main">
+    <div class="row">
+        <div class="col">
+            <!-- Search-box -->
+            <form action="results" method="POST" id="search-box" class="bg-light">
+                <div class="row mb-4">
+                    <div class="form-group col-md-9">
+                        <input type="text" name="search-bar" placeholder="Search for a blog"
+                            class="bg-light form-control form-control-underlined">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <button type="submit" class="btn btn-primary rounded-pill btn-block shadow-sm">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <!-- Result box -->
+        <div class="col results-blog-list bg-light">
+            <!--  -->
+            <h3 class="text-secondary">Results for {{ search_term }}:</h3>
+            {% for blog in blogs %}
+            <div class="row results-element">
+                <div class="col">
+                    <div class="media position-relative">
+                        <!-- Blog picture -->
+                        <img src="{{ url_for('static', filename='/images/' + blog.profile_pic_location) }}" class="mr-3 img-fluid results-image" alt="profile-pic">
+                        <div class="media-body">
+                            <!-- Blog title -->
+                            <h3 class="mt-0 text-primary"><a href={{"/blog/" + blog.id|string}} class="stretched-link">{{ blog.title }}</a></h3>
+                            <!-- Blog's creator -->
+                            <h6 class="text-info">{{ blog_owner_names[blog.user_id]}}</h6>
+                            <!-- Blog's description -->
+                            <p class="text-secondary">{{ blog.description }}</p>                            
+                        </div>
+                    </div>
+                    <!-- Line between results -->
+                    <hr>                    
+                </div>
+            </div>
+            {% else %}
+            <h5 class="text-danger">
+                No result has beem found!
+            </h5>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+Tehnologii folosite:
+-front-end: html, css, js + bootstrap 4
+-back-end: python + flask + SQLalchemy(pt a genera modelele bazei de date)
+-DB: sqlite
+
+Functii:
+1) Login
+2) Sign-up:
+    -dupa ce utilizatorul isi creaza un cont pe site acesta este trimis sa-si creeze un blog
+3) Creare/ Editare blog:
+    -fiecare utilizator este obligat sa aiba un blog
+    -un blog e caracterizat de titlu, descriere si imagine de profil
+    Imaginea:
+        -este salvata in static/images
+        -locatia ei este salvata in baza de date
+        -la inceputul numelui fiecarei imagini este inserat un set de 6 caractere random pt a micsora sansele ca 2 imagini sa aiba acelasi nume
+        -la adaugarea unei imagini noi de profil, vechea imagine este stearsa din folderul images, iar numele noii imagini este salvat in DB
+4) Pagina Blog:
+    -se pot adauga postari noi
+    -se pot adauga comment-uri la postari(daca esti logat)
+    -se poate da follow la un blog(daca esti logat)
+    
+    Butoanele de like(NEFUNCTIONALE):
+    -nu am reusit sa le implementez din cauza lipsei de timp
+    -modul cum le-as fi implementat:
+        -generez linkuri pt fiecare buton in care sa am id-ul postarii sau comentariului de care apartine
+        -linkul acela sa trimita utilizatorul la o ruta de genul /like-post/<id> sau /like-comm/<id>
+        -in acea ruta sa adaug like-ul la baza de date si sa incrementez numarul total de like-uri din statistica blogului
+        -pt a sterge like-ul as folosii ceva asemanator cum ar fi /dislike-post/<id> sau /dislike-comm/<id> in care sa sterg like-ul din baza de date si sa scad nr de like-uri din statistica blogului
+5) Pagina principala(index):
+    -exista o casuta de cautare pt a gasii blogul dorit, care reintoarce o pagina rezultat
+    -exista un afisaj pt ultimele postari de pe site
+    -exista un afisaj pt:
+        -bloguri noi(in cazul in care utilizatorul nu este logat)
+        -bloguri favorite(in cazul in care utilizatorul este logat) -afiseaza blogurile la care utilizatorul a dat follow
+    -exista un afisaj pt:
+        -comentarii noi(daca utilizatorul nu este logat) -afiseaza ultimele comentarii de pe site
+        -comentarii hot(daca utilizatorul este logat) -NEFUNCTIONALE, ar fi trebuit sa arate comentariile cu cel mai mare nr de like-uri de pe site, dar cum like-urile nu functioneaza nici acestea nu functioneaza, in locul lor sunt afisate comentariile cele mai recente
+6) Pagina my-account:
+    -permite logout-ul utilizatorului
+    -permite schimbarea datelor(parola si email)       

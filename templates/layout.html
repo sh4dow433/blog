@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href= {{ url_for('static', filename='style.css') }} rel="stylesheet" type="text/css" />
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+</head>
+<body class="height-100">
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark fixed-top">
+        <a class="navbar-brand" href="/">DP</a>
+        <!-- Test if logged in -->
+        {% if logged_in %}
+        <div class="navbar-nav">            
+            <a href="/" class="nav-item nav-link">Home</a>
+            <a href="/my-blog" class="nav-item nav-link">Your Blog</a>
+            <!-- <a href="/favourite-blogs" class="nav-item nav-link">Favourite Blogs</a> -->
+        </div>
+        <div class="navbar-nav ml-auto">
+            <a href="/my-account" class="nav-item nav-link" >My Account</a>       
+        </div>
+        {% else %}
+        <div class="navbar-nav">            
+            <a href="/" class="nav-item nav-link">Home</a>
+            <!-- <a href="#" class="nav-item nav-link">Popular Posts</a> -->
+        </div>
+        <div class="navbar-nav ml-auto">
+            <a href="/login" class="nav-item nav-link" >Login</a>
+            <button type="button" onclick="location.href = '/sign-up';" class="btn btn-light rounded-pill text-primary">Sign Up</button>            
+        </div>
+        {% endif %}
+    </nav>
+    <div class="container-fluid" style="margin-top: 100px"> 
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer class="text-white text-center">
+        <p><b><i>Facut de David</i></b></p>
+    </footer>
+
+    {% block scripts %}
+
+    {% endblock %}
+</body>
+</html>
